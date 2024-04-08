@@ -7,17 +7,19 @@ from datetime import datetime
 import json
 import pyarrow
 
+bucket_name = "trim-heaven-415202"
+project = "trim-heaven-415202"
+
 def format_message(message, timestamp=beam.DoFn.TimestampParam):
     json_value = json.loads(message.data)
     value = str(datetime.utcfromtimestamp(float(timestamp)).strftime("%Y-%m-%d %H:%M:%S"),) + ","
     value += message.attributes['soil'] + "," + message.attributes['humidity'] + "," + message.attributes['temperature'] + "," + json_value['data']['message']
     return value
-    
 
-output_gcs = 'gs://trim-heaven-415202/watering_system_data/sensor_data'
+output_gcs = f'gs://{bucket_name}/watering_system_data/sensor_data'
 with beam.Pipeline(options=PipelineOptions()) as p:
     (p
-     | 'reading from topic' >> beam.io.ReadFromPubSub(topic="projects/trim-heaven-415202/topics/plant-watering-system-data", with_attributes=True)
+     | 'reading from topic' >> beam.io.ReadFromPubSub(topic=f"projects/{project}/topics/plant-watering-system-data", with_attributes=True)
      | 'window' >> beam.WindowInto(
                          window.FixedWindows(300),
                          allowed_lateness=30)

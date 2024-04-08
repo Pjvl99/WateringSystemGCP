@@ -2,7 +2,8 @@ from google.cloud import pubsub_v1
 import json
 
 publisher = pubsub_v1.PublisherClient()
-
+topic = "plant-watering-system-data"
+project = "trim-heaven-415202"
 
 def publish(request):
     try:
@@ -13,7 +14,7 @@ def publish(request):
       soil = request_json['soil']
 
       # References an existing topic
-      topic_path = publisher.topic_path("trim-heaven-415202", "plant-watering-system-data")
+      topic_path = publisher.topic_path(project, topic)
 
       message_json = json.dumps(
           {
