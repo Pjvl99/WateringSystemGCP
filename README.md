@@ -20,6 +20,7 @@ Diagram:
 --temp_location $BUCKET/temp \
 --region=$REGION \
 --service_account_email $SERVICE_ACCOUNT
+--streaming
 
 - This is how the cloud function look like:
 
