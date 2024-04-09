@@ -1,6 +1,6 @@
 # WateringSystemGCP
 
-- The purpose of this data pipeline is to ingest data coming from sensors to snowflake in real time. The streaming job is using a fixed window of 30 minutes.
+- The purpose of this data pipeline is to ingest data coming from sensors to snowflake in real time. The streaming job is using a fixed window of 5 minutes.
 
 Diagram:
 
