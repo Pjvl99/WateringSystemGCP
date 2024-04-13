@@ -6,9 +6,11 @@ from apache_beam.runners.interactive.interactive_runner import InteractiveRunner
 from datetime import datetime
 import json
 import pyarrow
+import os
 
-bucket_name = "trim-heaven-415202"
-project = "trim-heaven-415202"
+bucket_name = os.environ["BUCKET"]
+project = os.environ["PROJECT_ID"]
+topic = os.environ["TOPIC"]
 
 def format_message(message, timestamp=beam.DoFn.TimestampParam):
     json_value = json.loads(message.data)
@@ -19,7 +21,7 @@ def format_message(message, timestamp=beam.DoFn.TimestampParam):
 output_gcs = f'gs://{bucket_name}/watering_system_data/sensor_data'
 with beam.Pipeline(options=PipelineOptions()) as p:
     (p
-     | 'reading from topic' >> beam.io.ReadFromPubSub(topic=f"projects/{project}/topics/plant-watering-system-data", with_attributes=True)
+     | 'reading from topic' >> beam.io.ReadFromPubSub(topic=f"projects/{project}/topics/{topic}", with_attributes=True)
      | 'window' >> beam.WindowInto(
                          window.FixedWindows(300),
                          allowed_lateness=30)
